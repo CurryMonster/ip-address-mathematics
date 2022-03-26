@@ -16,8 +16,6 @@ typedef std::array<std::array<int, DIGITS>, TOKENS> matrix_4x8;
 std::array<std::string, TOKENS> split(std::string str, char delim);
 int str_to_int(std::string str);
 std::string int_to_str(int num);
-void swap(int& x, int& y);
-void reverse(std::array<int, DIGITS>& bin);
 std::array<int, DIGITS> dec_to_bin(const int& num);
 int bin_to_dec(const std::array<int, DIGITS>& bin);
 matrix_4x8 get_addr_bins(const std::string& address);

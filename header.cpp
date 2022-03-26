@@ -16,22 +16,6 @@ int str_to_int(std::string str) {
     return num;
 }
 
-void swap(int& x, int& y) {
-    int t = x;
-    x = y;
-    y = t;
-}
-
-void reverse(std::array<int, DIGITS>& arr) {
-    int i {0};
-    int j {arr.size() - 1};
-    while (i < j) {
-        swap(arr.at(i), arr.at(j));
-        i++; 
-        j--;
-    }
-}
-
 std::array<int, DIGITS> dec_to_bin(const int& num) {
     std::array<int, DIGITS> bin {};
     int q {num};
@@ -39,7 +23,7 @@ std::array<int, DIGITS> dec_to_bin(const int& num) {
         bin.at(i) = q % 2;
         q /= 2;
     }
-    reverse(bin);
+    std::reverse(bin.begin(), bin.end());
     return bin;
 }
 
@@ -47,8 +31,7 @@ matrix_4x8 get_addr_bins(const std::string& address) {
     matrix_4x8 bins {};
     std::array<std::string, TOKENS> tokens = split(address, '.');
     for (size_t i {0}; i < tokens.size(); i++) {
-        int x = str_to_int(tokens.at(i));
-        bins.at(i) = dec_to_bin(x);
+        bins.at(i) = dec_to_bin(str_to_int(tokens.at(i)));
     }
     return bins;
 }

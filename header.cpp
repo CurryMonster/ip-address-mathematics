@@ -29,10 +29,15 @@ std::array<int, DIGITS> dec_to_bin(const int& num) {
 
 matrix_4x8 get_addr_bins(const std::string& address) {
     matrix_4x8 bins {};
+
     std::array<std::string, TOKENS> tokens = split(address, '.');
-    for (size_t i {0}; i < tokens.size(); i++) {
-        bins.at(i) = dec_to_bin(str_to_int(tokens.at(i)));
-    }
+
+    int i {0};
+    std::for_each(tokens.begin(), tokens.end(), [&](const auto& x){
+        bins.at(i) = dec_to_bin(str_to_int(x));
+        i += 1;
+    });
+    
     return bins;
 }
 

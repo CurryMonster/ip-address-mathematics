@@ -37,37 +37,40 @@ matrix_4x8 get_addr_bins(const std::string& address) {
         bins.at(i) = dec_to_bin(str_to_int(x));
         i += 1;
     });
-    
+
     return bins;
 }
 
 matrix_4x8 get_mask_bins(const std::string& mask, bool compliment) {
-    matrix_4x8 bins;
+    matrix_4x8 bins {};
     int counter {0};
+
     if (!compliment) {
-        for (int i {0}; i < TOKENS; i++) {
-            for (int j {0}; j < DIGITS; j++) {
+        for (auto& i: bins) {
+            for (auto& j: i) {
                 if (counter < str_to_int(mask)) {
-                    bins.at(i).at(j) = 1;
+                    j = 1;
                     counter += 1;
                 } 
                 else 
-                    bins.at(i).at(j) = 0;
+                    j = 0;
             }
         }
     }
+
     if (compliment) {
-        for (int i {0}; i < TOKENS; i++) {
-            for (int j {0}; j < DIGITS; j++) {
+        for (auto& i: bins) {
+            for (auto& j: i) {
                 if (counter < str_to_int(mask)) {
-                    bins.at(i).at(j) = 0;
+                    j = 0;
                     counter += 1;
                 } 
                 else 
-                    bins.at(i).at(j) = 1;
+                    j = 1;
             }
         }
     }
+
     return bins;
 }
 
@@ -111,15 +114,21 @@ std::string get_network_id(const std::string& ip_address, const std::string& mas
     matrix_4x8 mask_bins = get_mask_bins(mask, false);
 
     matrix_4x8 res;
-    for (size_t i {0}; i < TOKENS; i++)
-        res.at(i) = comp_bins(ip_addr_bins.at(i), mask_bins.at(i), '&'); 
+    size_t i {0};
+    std::for_each(res.begin(), res.end(), [&](auto& x){
+        x = comp_bins(ip_addr_bins.at(i), mask_bins.at(i), '&');
+        i += 1;
+    });
 
-    for (size_t i {0}; i < res.size(); i++) {
-        if (i == res.size() - 1)
-            network_id += int_to_str(bin_to_dec(res.at(i)));
-        else 
-            network_id += int_to_str(bin_to_dec(res.at(i))) + ".";
-    }
+    size_t count {0};
+    std::for_each(res.begin(), res.end(), [&](const auto& x){
+        if (count == res.size() - 1)
+            network_id += int_to_str(bin_to_dec(x));
+        else {
+            network_id += int_to_str(bin_to_dec(x)) + ".";
+            count += 1;
+        }
+    });
 
     return network_id;
 }
